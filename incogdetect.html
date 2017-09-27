@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>chrome incognito detector</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+<tt>
+incognito status :: <span id="incogitostatus"><noscript>javascript must be enabled</noscript></span>
+<br>
+<br>
+<span id="err"></span>
+</tt>
+<script type="text/javascript">
+document.getElementById('incogitostatus').innerHTML = '...';
+isEdge = navigator.userAgent.toLowerCase().indexOf('edge') > -1; // ms edge is using window.chrome for some reason while not having the required api
+isBrowserSupported = !!window.chrome;
+var url = window.location.href;
+var url = url.substring(0, 7); // get protocol
+if (url == 'file://') {
+    // file stored locally
+    document.getElementById('incogitostatus').innerHTML = 'error';
+    document.getElementById('err').innerHTML = 'error :: cannot be ran locally';
+} else if (!isEdge && isBrowserSupported) {
+    if (window.requestFileSystem || window.webkitRequestFileSystem) {
+        window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+        function onFailure() {
+            // incognito
+            document.getElementById('incogitostatus').innerHTML = 'true';
+        }
+        function onSuccess() {
+            // not in incognito (standard)
+            document.getElementById('incogitostatus').innerHTML = 'false';
+        }
+        window.requestFileSystem(window.TEMPORARY, 1024, onSuccess, onFailure);
+    } else {
+        // filesystem api does not exist
+        document.getElementById('incogitostatus').innerHTML = 'error';
+        document.getElementById('err').innerHTML = 'error :: filesystem api not supported';
+    }
+} else {
+    // if found to not be using chrome's components or google chrome itself
+    document.getElementById('incogitostatus').innerHTML = 'error';
+    document.getElementById('err').innerHTML = 'error :: only google chrome is supported';
+}
+</script>
+</body>
+</html>
