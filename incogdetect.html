@@ -3,14 +3,17 @@
 <head>
 <title>chrome incognito detector</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<style>
+body {
+    font-family: monospace;
+}
+</style>
 </head>
 <body>
-<tt>
 incognito status :: <span id="incogitostatus"><noscript>javascript must be enabled</noscript></span>
 <br>
 <br>
 <span id="err"></span>
-</tt>
 <script type="text/javascript">
 document.getElementById('incogitostatus').innerHTML = '...';
 isEdge = navigator.userAgent.toLowerCase().indexOf('edge') > -1; // ms edge is using window.chrome for some reason while not having the required api
